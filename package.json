@@ -2,7 +2,10 @@
   "name": "checkforce.js",
   "version": "3.0.0-alpha1",
   "description": "A library that helps to perform tasks to test strength of passwords",
-  "main": "dist/checkforce.min.js",
+  "main": "dist/checkforce.bundle.min.js",
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "test": "karma start --single-run",
     "start": "webpack serve --open",
@@ -10,7 +13,8 @@
     "build": "webpack --env BUNDLE=true",
     "build-standalone": "webpack --env BUNDLE=false",
     "build-minify": "webpack --env BUNDLE=true --env MINIFY=true",
-    "build-minify-standalone": "webpack --env BUNDLE=false --env MINIFY=true"
+    "build-minify-standalone": "webpack --env BUNDLE=false --env MINIFY=true",
+    "prepublishOnly": "npm run build-minify"
   },
   "repository": {
     "type": "git",

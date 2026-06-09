@@ -1,0 +1,25 @@
+# Código-fonte
+src/
+
+# Testes
+test/
+
+# Exemplos e demo
+index.html
+examples/
+
+# Configuração de build e testes
+webpack.config.js
+karma.conf.js
+babel.config.*
+.babelrc
+
+# Ferramentas e CI
+.github/
+.vscode/
+.editorconfig
+.eslintrc*
+.prettierrc*
+
+# Dependências locais
+node_modules/

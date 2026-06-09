@@ -5,18 +5,28 @@
 <h3 align="center">Checkforce.js</h3>
 <br/>
 
-<!-- [![BCH compliance](https://bettercodehub.com/edge/badge/dejaneves/checkforce.js)](https://bettercodehub.com)
-[![Build Status](https://travis-ci.org/dejaneves/checkforce.js.svg?branch=master)](https://travis-ci.org/dejaneves/checkforce.js) -->
-
 # Força da Senha
 
 > Uma biblioteca para verificar a força da senha
 
-A versão 3 do *checkforce.js*, vem com novidades. Ele depende de 2 bibliotecas externas, são elas: o [Popper](https://popper.js.org/) para renderizar a caixa do conteúdo, e o [Zxcvbn](https://github.com/dropbox/zxcvbn) para analisar a força da senha.
+A versão 3 do _checkforce.js_, vem com novidades. Ele depende de 2 bibliotecas externas, são elas: o [Popper](https://popper.js.org/) para renderizar a caixa do conteúdo, e o [Zxcvbn](https://github.com/dropbox/zxcvbn) para analisar a força da senha.
 
 <p align="center">
   <img  src="https://user-images.githubusercontent.com/6599252/155199700-b14e751e-5248-48bd-ab33-5cf6397eed94.png">
 </p>
+
+---
+
+## ✨ Interface Premium Local (Novos Ajustes)
+
+Adicionamos ao projeto uma aplicação de exemplo moderna (`index.html`) com foco em portfólio e alta usabilidade:
+
+- **Design Glassmorphism**: Visual no estilo vidro fosco, modo escuro em grade e cores neon de cibersegurança.
+- **Barra Dinâmica Progressiva**: O nível visual de segurança (Fraca, Média, Forte, Muito Forte) evolui conforme as metas amigáveis de mercado são preenchidas.
+- **Gerador e Copiador**: Atalhos em lote para gerar senhas aleatórias seguras e copiá-las instantaneamente.
+- **Tempo de Quebra Estimatizado**: Exibição em tempo real da inteligência de entropia trazida pelo motor do `zxcvbn`.
+
+---
 
 ## Bundle
 
@@ -27,36 +37,35 @@ Você tem a opção de usar o **checkforce** com todas as library incluídas, us
 Incluindo um único arquivo com todas as dependências.
 
 ```html
-  <script src="dist/checkforce.bundle.js" ></script>
+<script src="dist/checkforce.bundle.js"></script>
 ```
 
 versão minificada.
 
 ```html
-  <script src="dist/checkforce.bundle.min.js" ></script>
+<script src="dist/checkforce.bundle.min.js"></script>
 ```
 
-Tanto o `checkforce.bundle.js` quanto o `checkforce.bundle.min.js` incluem o Popper e o Zxcvbn. 
+Tanto o `checkforce.bundle.js` quanto o `checkforce.bundle.min.js` incluem o Popper e o Zxcvbn.
 
 ### Usando arquivo separado
 
 Usando a solução com scripts separados.
 
 ```html
-  <script src="path/to/popper.min.js" ></script>
-  
-  <script src="path/to/zxcvbn.min.js" ></script>
+<script src="path/to/popper.min.js"></script>
 
-  <script src="dist/checkforce.min.js" ></script>
+<script src="path/to/zxcvbn.min.js"></script>
+
+<script src="dist/checkforce.min.js"></script>
 ```
 
 ## Arquivos JS
 
-| Arquivo JS      | Popper | Zxcvbn
-| ----------- | ----------- | ----------- |
-| <span style="color: #d63384;">checkforce.bundle.js <br/> checkforce.bundle.min.js</span>      | Incluído       | Incluído
-| <span style="color: #d63384;">checkforce.js <br/> checkforce.min.js</span>     | --       | --           
-
+| Arquivo JS                                                                               | Popper   | Zxcvbn   |
+| ---------------------------------------------------------------------------------------- | -------- | -------- |
+| <span style="color: #d63384;">checkforce.bundle.js <br/> checkforce.bundle.min.js</span> | Incluído | Incluído |
+| <span style="color: #d63384;">checkforce.js <br/> checkforce.min.js</span>               | --       | --       |
 
 ## Instalação
 
@@ -72,8 +81,8 @@ npm install checkforce.js --save
     ...
 
     <label for="input-password">Senha</label>
-    <input type="password" id="input-password" placeholder="Senha">
-    
+    <input type="password" id="input-password" placeholder="Senha" />
+
     ...
 
     <button type="submit">Criar</button>
@@ -82,13 +91,12 @@ npm install checkforce.js --save
   <!-- Incluindo a biblioteca -->
   <script src="dist/checkforce.bundle.js"></script>
   <script>
-    const checkForce = new CheckForce('#input-password');
+    const checkForce = new CheckForce("#input-password");
   </script>
-
 </body>
 ```
 
-Por padrão a caixa de conteúdo que mostra o *nível/força* da senha aparece na parte *superior* do campo input.
+Por padrão a caixa de conteúdo que mostra o _nível/força_ da senha aparece na parte _superior_ do campo input.
 
 ![checkforce-top](https://user-images.githubusercontent.com/6599252/155201501-bb6cebf1-1e83-47ac-8ef2-6f39e5050872.png)
 
@@ -100,8 +108,8 @@ Para deixar a caixa na posição inferior: `bottom`.
 ...
 
 <script>
-  const checkForce = new CheckForce('#input-password', {
-    placement: 'bottom'
+  const checkForce = new CheckForce("#input-password", {
+    placement: "bottom",
   });
 </script>
 ```
@@ -114,8 +122,8 @@ Para deixar a caixa na posição lateral esquerdo: `left`.
 ...
 
 <script>
-  const checkForce = new CheckForce('#input-password', {
-    placement: 'left'
+  const checkForce = new CheckForce("#input-password", {
+    placement: "left",
   });
 </script>
 ```
@@ -124,13 +132,12 @@ Para deixar a caixa na posição lateral esquerdo: `left`.
 
 Para deixar a caixa na posição lateral direito: `right`.
 
-
 ```html
 ...
 
 <script>
-  const checkForce = new CheckForce('#input-password', {
-    placement: 'right'
+  const checkForce = new CheckForce("#input-password", {
+    placement: "right",
   });
 </script>
 ```
@@ -141,12 +148,37 @@ Para deixar a caixa no modo responsivo. Ou seja para ela ajustar-se de acordo co
 
 ![checkforce-auto](https://user-images.githubusercontent.com/6599252/155208790-cfecd856-f4e9-4488-a11c-8ac9420ac1f0.gif)
 
+---
 
+## 🛠️ Comandos de Desenvolvimento e Testes
+
+Agora a esteira do projeto está otimizada usando **Webpack 5** e **Karma/Mocha**. Use os scripts locais abaixo:
+
+- **Instalar Dependências Locais**:
+  ```bash
+  npm install --legacy-peer-deps
+  ```
+- **Iniciar Interface Premium (Servidor Local)**:
+  ```bash
+  npm start
+  ```
+- **Executar Testes Automatizados no Chrome**:
+  ```bash
+  npm test
+  ```
+- **Compilar Código-Fonte (Build de Produção)**:
+  ```bash
+  npm run build-minify
+  ```
+
+---
 
 ## Versioning
+
 For transparency into our release cycle and in striving to maintain backward compatibility, CheckForce.js is maintained under the Semantic Versioning guidelines. Sometimes we screw up, but we'll adhere to these rules whenever possible.
 
 For more information on SemVer, please visit <http://semver.org/>
 
 ## License
+
 MIT
