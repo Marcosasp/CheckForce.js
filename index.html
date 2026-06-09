@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CheckForce.js — Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --clr-weak: #ef4444;
+      --clr-fair: #f59e0b;
+      --clr-strong: #22c55e;
+      --clr-valid-bg: rgba(34, 197, 94, 0.10);
+      --clr-valid-border: rgba(34, 197, 94, 0.30);
+      --text-primary: #f1f5f9;
+      --text-secondary: rgba(241, 245, 249, 0.50);
+      --glass-bg: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.11);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #080818;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Background orbs ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.40;
+      will-change: transform;
+      animation: drift ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    .orb--1 {
+      width: 560px;
+      height: 560px;
+      background: radial-gradient(circle at center, #7c3aed 0%, transparent 70%);
+      top: -180px;
+      left: -160px;
+      animation-duration: 14s;
+    }
+
+    .orb--2 {
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle at center, #1d4ed8 0%, transparent 70%);
+      bottom: -150px;
+      right: -130px;
+      animation-duration: 18s;
+      animation-delay: -5s;
+    }
+
+    .orb--3 {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle at center, #0ea5e9 0%, transparent 70%);
+      top: 55%;
+      left: 58%;
+      opacity: 0.25;
+      animation-duration: 11s;
+      animation-delay: -3s;
+    }
+
+    @keyframes drift {
+      0% {
+        transform: translate(0px, 0px) scale(1);
+      }
+
+      50% {
+        transform: translate(28px, -24px) scale(1.06);
+      }
+
+      100% {
+        transform: translate(-18px, 20px) scale(0.96);
+      }
+    }
+
+    /* Mesh grid overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Card ── */
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 440px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 40px 36px;
+      box-shadow:
+        0 40px 80px rgba(0, 0, 0, 0.50),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    /* ── Header ── */
+    .card-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .card-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+      box-shadow: 0 10px 28px rgba(124, 58, 237, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.4px;
+    }
+
+    .card-subtitle {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* ── Input ── */
+    .field-label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 14px 48px 14px 16px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+      outline: none;
+      transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+      caret-color: #7c3aed;
+    }
+
+    .input-wrapper input::placeholder {
+      color: rgba(241, 245, 249, 0.25);
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    .input-wrapper input:focus {
+      border-color: rgba(124, 58, 237, 0.55);
+      background: rgba(255, 255, 255, 0.09);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.14), 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-eye {
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      transition: color 0.2s;
+      line-height: 0;
+    }
+
+    .btn-eye:hover {
+      color: var(--text-primary);
+    }
+
+    .btn-eye svg {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── Action Row ── */
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .btn-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.12s;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .btn-action svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .btn-action:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.16);
+      color: var(--text-primary);
+    }
+
+    .btn-action:active {
+      transform: scale(0.97);
+    }
+
+    .btn-action--generate:hover {
+      border-color: rgba(124, 58, 237, 0.45);
+      color: #a78bfa;
+      background: rgba(124, 58, 237, 0.08);
+    }
+
+    .btn-action--copy.copied {
+      border-color: rgba(34, 197, 94, 0.40);
+      color: var(--clr-strong);
+      background: rgba(34, 197, 94, 0.07);
+    }
+
+    /* ── Strength bar ── */
+    .strength-section {
+      margin-bottom: 22px;
+    }
+
+    .strength-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 9px;
+    }
+
+    .strength-meta-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .strength-meta-value {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      transition: color 0.35s ease;
+    }
+
+    .strength-track {
+      height: 5px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      background-color: var(--clr-weak);
+      transition: width 0.55s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.40s ease;
+    }
+
+    /* ── Crack time ── */
+    .crack-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 9px;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      min-height: 18px;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .crack-row.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .crack-row svg {
+      width: 12px;
+      height: 12px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .crack-value {
+      font-weight: 700;
+      color: var(--text-primary);
+      transition: color 0.3s;
+    }
+
+    /* ── Checklist ── */
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 13px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      transition: background 0.30s ease, border-color 0.30s ease;
+    }
+
+    .check-item.valido {
+      background: var(--clr-valid-bg);
+      border-color: var(--clr-valid-border);
+      animation: pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.96);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .check-icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-secondary);
+      transition: background 0.30s, color 0.30s;
+    }
+
+    .check-item.valido .check-icon {
+      background: rgba(34, 197, 94, 0.18);
+      color: var(--clr-strong);
+    }
+
+    .check-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .check-name {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .check-count {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.30s;
+    }
+
+    .check-item.valido .check-count {
+      color: var(--clr-strong);
+    }
+
+    /* Suprime o popup nativo da biblioteca */
+    #checkforce-tooltip {
+      display: none !important;
+    }
+
+    /* ── Footer ── */
+    .card-footer {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 12px;
+      color: rgba(241, 245, 249, 0.20);
+      font-weight: 500;
+    }
+
+    .card-footer a {
+      color: rgba(124, 58, 237, 0.70);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .card-footer a:hover {
+      color: rgba(124, 58, 237, 1);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="orb orb--1"></div>
+  <div class="orb orb--2"></div>
+  <div class="orb orb--3"></div>
+
+  <div class="card">
+
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+      </div>
+      <h1 class="card-title">Força da Senha</h1>
+      <p class="card-subtitle">Analise a segurança da sua senha em tempo real</p>
+    </div>
+
+    <label class="field-label" for="password">Senha</label>
+    <div class="input-wrapper">
+      <input type="password" id="password" placeholder="Digite sua senha...">
+      <button class="btn-eye" id="togglePwd" type="button" aria-label="Alternar visibilidade">
+        <svg id="iconEye" viewBox="0 0 24 24">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <svg id="iconEyeOff" viewBox="0 0 24 24" style="display:none">
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+          <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+          <line x1="1" y1="1" x2="23" y2="23" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-action btn-action--generate" id="btnGenerate" type="button">
+        <!-- lightning bolt -->
+        <svg viewBox="0 0 24 24">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        </svg>
+        <span>Gerar Senha</span>
+      </button>
+      <button class="btn-action btn-action--copy" id="btnCopy" type="button">
+        <!-- clipboard -->
+        <svg id="iconClipboard" viewBox="0 0 24 24">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+        </svg>
+        <svg id="iconCheck" viewBox="0 0 24 24" style="display:none">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span id="copyText">Copiar</span>
+      </button>
+    </div>
+
+    <div class="strength-section">
+      <div class="strength-meta">
+        <span class="strength-meta-label">Nível de segurança</span>
+        <span class="strength-meta-value" id="strengthText">—</span>
+      </div>
+      <div class="strength-track">
+        <div class="strength-fill" id="strengthBar"></div>
+      </div>
+      <div class="crack-row" id="crackRow">
+        <!-- cpu / brain icon -->
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="4" width="16" height="16" rx="2" />
+          <rect x="9" y="9" width="6" height="6" />
+          <line x1="9" y1="2" x2="9" y2="4" />
+          <line x1="15" y1="2" x2="15" y2="4" />
+          <line x1="9" y1="20" x2="9" y2="22" />
+          <line x1="15" y1="20" x2="15" y2="22" />
+          <line x1="20" y1="9" x2="22" y2="9" />
+          <line x1="20" y1="14" x2="22" y2="14" />
+          <line x1="2" y1="9" x2="4" y2="9" />
+          <line x1="2" y1="14" x2="4" y2="14" />
+        </svg>
+        <span>Tempo estimado para quebrar:</span>
+        <span class="crack-value" id="crackTime">—</span>
+      </div>
+    </div>
+
+    <p class="section-eyebrow">Requisitos</p>
+    <div class="checklist">
+      <div class="check-item" id="upper">
+        <span class="check-icon" id="iconUpper">✕</span>
+        <div class="check-text">
+          <span class="check-name">Maiúsculas</span>
+          <span class="check-count" id="countUpper">0 / 1</span>
+        </div>
+      </div>
+      <div class="check-item" id="lower">
+        <span class="check-icon" id="iconLower">✕</span>
+        <div class="check-text">
+          <span class="check-name">Minúsculas</span>
+          <span class="check-count" id="countLower">0 / 1</span>
+        </div>
+      </div>
+      <div class="check-item" id="numbers">
+        <span class="check-icon" id="iconNumbers">✕</span>
+        <div class="check-text">
+          <span class="check-name">Números</span>
+          <span class="check-count" id="countNumbers">0 / 2</span>
+        </div>
+      </div>
+      <div class="check-item" id="special">
+        <span class="check-icon" id="iconSpecial">✕</span>
+        <div class="check-text">
+          <span class="check-name">Especiais</span>
+          <span class="check-count" id="countSpecial">0 / 1</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="card-footer">Powered by <a href="https://github.com/jaimeneeves/checkforce.js" target="_blank">CheckForce.js</a></p>
+  </div>
+
+  <!-- zxcvbn via CDN (expõe window.zxcvbn para a demo page) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+  <!-- Bundle da biblioteca (já traz zxcvbn internamente + expõe window.CheckForce) -->
+  <script src="./dist/checkforce.bundle.min.js"></script>
+
+  <script>
+    // ── Suprime o popup nativo ANTES de criar qualquer instância ──────────────
+    const Constructor = window.CheckForce;
+    Constructor.prototype.show = () => { };
+    Constructor.prototype.hide = () => { };
+
+    // Instância única reutilizada em todos os eventos
+    const checker = new Constructor('#password');
+
+    // ── Referências DOM ───────────────────────────────────────────────────────
+    const inputSenha = document.getElementById('password');
+    const strengthBar = document.getElementById('strengthBar');
+    const strengthText = document.getElementById('strengthText');
+    const crackRow = document.getElementById('crackRow');
+    const crackTimeEl = document.getElementById('crackTime');
+
+    // ── Configuração dos níveis de força ─────────────────────────────────────
+    // Índice = número de requisitos satisfeitos (0–4)
+    const STRENGTH = [
+      { width: '0%', color: '#ef4444', label: '—', labelColor: 'rgba(241,245,249,0.35)' },
+      { width: '25%', color: '#ef4444', label: 'Fraca', labelColor: '#ef4444' },
+      { width: '50%', color: '#ef4444', label: 'Fraca', labelColor: '#ef4444' },
+      { width: '75%', color: '#f59e0b', label: 'Média', labelColor: '#f59e0b' },
+      { width: '100%', color: '#22c55e', label: 'Forte', labelColor: '#22c55e' },
+    ];
+    const MUITO_FORTE = { width: '100%', color: '#38bdf8', label: 'Muito Forte', labelColor: '#38bdf8' };
+
+    // ── Toggle olhinho ────────────────────────────────────────────────────────
+    document.getElementById('togglePwd').addEventListener('click', () => {
+      const hidden = inputSenha.type === 'password';
+      inputSenha.type = hidden ? 'text' : 'password';
+      document.getElementById('iconEye').style.display = hidden ? 'none' : '';
+      document.getElementById('iconEyeOff').style.display = hidden ? '' : 'none';
+    });
+
+    // ── Gerador de senha forte (satisfaz todos os requisitos da demo) ─────────
+    function pick(charset, n) {
+      return Array.from({ length: n }, () => charset[Math.floor(Math.random() * charset.length)]);
+    }
+    function gerarSenha() {
+      const u = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+      const l = 'abcdefghjkmnpqrstuvwxyz';
+      const n = '0123456789';
+      const s = '!@#$%&*()_-+=[]{}|:;<>?';
+      // 3 maiúsculas + 3 minúsculas + 10 números + 4 especiais = 20 chars
+      const chars = [...pick(u, 3), ...pick(l, 3), ...pick(n, 4), ...pick(s, 2)];
+      for (let i = chars.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [chars[i], chars[j]] = [chars[j], chars[i]];
+      }
+      return chars.join('');
+    }
+
+    document.getElementById('btnGenerate').addEventListener('click', () => {
+      inputSenha.value = gerarSenha();
+      // Mostra a senha gerada e dispara validação
+      inputSenha.type = 'text';
+      document.getElementById('iconEye').style.display = 'none';
+      document.getElementById('iconEyeOff').style.display = '';
+      inputSenha.dispatchEvent(new Event('input'));
+    });
+
+    // ── Copiar para área de transferência ─────────────────────────────────────
+    document.getElementById('btnCopy').addEventListener('click', async () => {
+      const senha = inputSenha.value;
+      if (!senha) return;
+
+      try {
+        await navigator.clipboard.writeText(senha);
+      } catch {
+        // Fallback para navegadores sem Clipboard API
+        const el = Object.assign(document.createElement('textarea'), {
+          value: senha,
+          style: 'position:fixed;opacity:0'
+        });
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+      }
+
+      const btn = document.getElementById('btnCopy');
+      const label = document.getElementById('copyText');
+      btn.classList.add('copied');
+      document.getElementById('iconClipboard').style.display = 'none';
+      document.getElementById('iconCheck').style.display = '';
+      label.textContent = 'Copiado!';
+
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        document.getElementById('iconClipboard').style.display = '';
+        document.getElementById('iconCheck').style.display = 'none';
+        label.textContent = 'Copiar';
+      }, 2200);
+    });
+
+    // ── Tradução dos tempos do zxcvbn ─────────────────────────────────────────
+    function traduzirTempo(s) {
+      if (!s) return '—';
+      if (s === 'less than a second') return 'menos de 1 segundo';
+      return s
+        .replace(/(\d+)\s+seconds?/, (_, n) => `${n} segundo${+n > 1 ? 's' : ''}`)
+        .replace(/(\d+)\s+minutes?/, (_, n) => `${n} minuto${+n > 1 ? 's' : ''}`)
+        .replace(/(\d+)\s+hours?/, (_, n) => `${n} hora${+n > 1 ? 's' : ''}`)
+        .replace(/(\d+)\s+days?/, (_, n) => `${n} dia${+n > 1 ? 's' : ''}`)
+        .replace(/(\d+)\s+months?/, (_, n) => `${n} ${+n > 1 ? 'meses' : 'mês'}`)
+        .replace(/(\d+)\s+years?/, (_, n) => `${n} ano${+n > 1 ? 's' : ''}`)
+        .replace('centuries', 'séculos')
+        .replace('century', 'século');
+    }
+
+    // ── Listener principal de validação ───────────────────────────────────────
+    inputSenha.addEventListener('input', () => {
+      const res = checker.checkPasswordOnlyTest();
+
+      const u = res.uppercaseCheck.lengthUppercase;
+      const l = res.lowercaseCheck.lengthLowercase;
+      const n = res.numberCheck.lengthNumber;
+      const s = res.charsSpecialCheck.lengthChars;
+
+      atualizar('upper', 'iconUpper', 'countUpper', u >= 1, `${Math.min(u, 1)} / 1`);
+      atualizar('lower', 'iconLower', 'countLower', l >= 1, `${Math.min(l, 1)} / 1`);
+      atualizar('numbers', 'iconNumbers', 'countNumbers', n >= 2, `${Math.min(n, 2)} / 2`);
+      atualizar('special', 'iconSpecial', 'countSpecial', s >= 1, `${Math.min(s, 1)} / 1`);
+
+      // Score baseado nos 4 requisitos com os novos limiares
+      const score = [u >= 1, l >= 1, n >= 2, s >= 1].filter(Boolean).length;
+      let cfg = STRENGTH[score];
+
+      // zxcvbn: tempo de quebra + bônus "Muito Forte" quando score===4 e zxcvbn===4
+      const valor = inputSenha.value;
+      if (valor && window.zxcvbn) {
+        const result = window.zxcvbn(valor);
+        if (score === 4 && result.score === 4) cfg = MUITO_FORTE;
+        const tempo = result.crack_times_display.offline_slow_hashing_1e4_per_second;
+        crackTimeEl.textContent = traduzirTempo(tempo);
+        crackRow.classList.add('visible');
+      } else {
+        crackRow.classList.remove('visible');
+      }
+
+      strengthBar.style.width = cfg.width;
+      strengthBar.style.backgroundColor = cfg.color;
+      strengthText.textContent = cfg.label;
+      strengthText.style.color = cfg.labelColor;
+    });
+
+    function atualizar(itemId, iconId, countId, valido, countText) {
+      document.getElementById(itemId).className = 'check-item' + (valido ? ' valido' : '');
+      document.getElementById(iconId).textContent = valido ? '✓' : '✕';
+      document.getElementById(countId).textContent = countText;
+    }
+  </script>
+</body>
+
+</html>
