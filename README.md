@@ -26,7 +26,7 @@ O projeto inclui uma página de demonstração (`index.html`) com uma UI de alto
 - **Modo Escuro com Efeitos Neon** — fundo escuro com orbs animados em gradiente roxo/azul e grade mesh sutil, criando profundidade sem distração.
 - **Glassmorphism** — card central com `backdrop-filter: blur`, bordas translúcidas e reflexo interno, no padrão premium de design moderno.
 - **Barra de Força Dinâmica** — cresce e muda de cor com transição suave entre quatro níveis: `Fraca` (vermelho), `Média` (amarelo), `Forte` (verde) e `Muito Forte` (azul celeste).
-- **Estimativa de Tempo de Quebra** — exibe em tempo real o tempo estimado para quebrar a senha por força bruta, alimentado pelo motor de entropia do `zxcvbn` (ex: *"Tempo estimado para quebrar: 3 séculos"*).
+- **Estimativa de Tempo de Quebra** — exibe em tempo real o tempo estimado para quebrar a senha por força bruta, alimentado pelo motor de entropia do `zxcvbn` (ex: _"Tempo estimado para quebrar: 3 séculos"_).
 - **Gerador de Senha Forte** — botão `⚡ Gerar Senha` que cria automaticamente uma senha de 12 caracteres com mix de todos os tipos, já satisfazendo todos os critérios de validação.
 - **Copiar para Área de Transferência** — botão `📋 Copiar` com feedback visual animado ("Copiado!") ao salvar a senha no clipboard.
 - **Checklist de Requisitos** — quatro blocos com progresso individual (ex: `1 / 1`, `2 / 2`) que acendem em verde ao serem satisfeitos, com animação de micro-interação.
@@ -38,12 +38,12 @@ O projeto inclui uma página de demonstração (`index.html`) com uma UI de alto
 
 Os critérios seguem um padrão amigável e realista de mercado, configurados para não intimidar o usuário final:
 
-| Critério | Mínimo exigido |
-|---|---|
-| Letras maiúsculas (A–Z) | **1** |
-| Letras minúsculas (a–z) | **1** |
-| Números (0–9) | **2** |
-| Caracteres especiais (!@#...) | **1** |
+| Critério                      | Mínimo exigido |
+| ----------------------------- | -------------- |
+| Letras maiúsculas (A–Z)       | **1**          |
+| Letras minúsculas (a–z)       | **1**          |
+| Números (0–9)                 | **2**          |
+| Caracteres especiais (!@#...) | **1**          |
 
 O método `checkPasswordOnlyTest()` retorna as **contagens brutas** de cada categoria, permitindo que você aplique seus próprios limiares na interface.
 
@@ -96,20 +96,20 @@ Use se preferir controlar as versões de Popper e Zxcvbn separadamente:
 ### Inicialização
 
 ```html
-<input type="password" id="minha-senha">
+<input type="password" id="minha-senha" />
 
 <script src="dist/checkforce.bundle.min.js"></script>
 <script>
   // window.CheckForce aponta diretamente para a classe (UMD + libraryExport: 'default')
-  const checker = new CheckForce('#minha-senha');
+  const checker = new CheckForce("#minha-senha");
 
-  document.getElementById('minha-senha').addEventListener('input', () => {
+  document.getElementById("minha-senha").addEventListener("input", () => {
     const resultado = checker.checkPasswordOnlyTest();
 
     console.log(resultado.uppercaseCheck.lengthUppercase); // nº de maiúsculas
     console.log(resultado.lowercaseCheck.lengthLowercase); // nº de minúsculas
-    console.log(resultado.numberCheck.lengthNumber);       // nº de dígitos
-    console.log(resultado.charsSpecialCheck.lengthChars);  // nº de especiais
+    console.log(resultado.numberCheck.lengthNumber); // nº de dígitos
+    console.log(resultado.charsSpecialCheck.lengthChars); // nº de especiais
   });
 </script>
 ```
@@ -139,12 +139,12 @@ Use se preferir controlar as versões de Popper e Zxcvbn separadamente:
 
 ## 📁 Arquivos de Distribuição
 
-| Arquivo | Popper.js | Zxcvbn | Indicado para |
-|---|---|---|---|
-| `checkforce.bundle.js` | ✅ Incluído | ✅ Incluído | Uso direto no browser, projetos sem bundler |
+| Arquivo                    | Popper.js   | Zxcvbn      | Indicado para                                  |
+| -------------------------- | ----------- | ----------- | ---------------------------------------------- |
+| `checkforce.bundle.js`     | ✅ Incluído | ✅ Incluído | Uso direto no browser, projetos sem bundler    |
 | `checkforce.bundle.min.js` | ✅ Incluído | ✅ Incluído | **Produção** — arquivo principal do pacote NPM |
-| `checkforce.js` | — | — | Projetos com bundler próprio (Webpack, Vite…) |
-| `checkforce.min.js` | — | — | Produção standalone com deps externas |
+| `checkforce.js`            | —           | —           | Projetos com bundler próprio (Webpack, Vite…)  |
+| `checkforce.min.js`        | —           | —           | Produção standalone com deps externas          |
 
 > O campo `"main"` do `package.json` aponta para `dist/checkforce.bundle.min.js`.
 
@@ -152,15 +152,15 @@ Use se preferir controlar as versões de Popper e Zxcvbn separadamente:
 
 ## 🛠️ Comandos de Desenvolvimento
 
-| Comando | O que faz |
-|---|---|
-| `npm install --legacy-peer-deps` | Instala todas as dependências locais, ignorando conflitos de peerDependencies |
-| `npm start` | Inicia o servidor de desenvolvimento Webpack na porta `9000` e abre o `index.html` |
-| `npm test` | Executa a suíte de testes automatizados (Karma + Mocha) no Chrome |
-| `npm run build` | Compila o bundle de desenvolvimento (sem minificação) |
-| `npm run build-minify` | Compila o bundle de **produção** minificado — arquivo principal para publicação |
-| `npm run build-standalone` | Compila a versão sem dependências embutidas (desenvolvimento) |
-| `npm run build-minify-standalone` | Compila a versão standalone minificada para uso com deps externas |
+| Comando                           | O que faz                                                                          |
+| --------------------------------- | ---------------------------------------------------------------------------------- |
+| `npm install --legacy-peer-deps`  | Instala todas as dependências locais, ignorando conflitos de peerDependencies      |
+| `npm start`                       | Inicia o servidor de desenvolvimento Webpack na porta `9000` e abre o `index.html` |
+| `npm test`                        | Executa a suíte de testes automatizados (Karma + Mocha) no Chrome                  |
+| `npm run build`                   | Compila o bundle de desenvolvimento (sem minificação)                              |
+| `npm run build-minify`            | Compila o bundle de **produção** minificado — arquivo principal para publicação    |
+| `npm run build-standalone`        | Compila a versão sem dependências embutidas (desenvolvimento)                      |
+| `npm run build-minify-standalone` | Compila a versão standalone minificada para uso com deps externas                  |
 
 ---
 
